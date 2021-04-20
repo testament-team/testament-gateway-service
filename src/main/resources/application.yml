@@ -1,0 +1,46 @@
+spring.profiles.active: dev
+
+services.core.host: ${CORE_SERVICE_HOST:http://localhost:8081}
+services.run.host: ${RUN_SERVICE_HOST:http://localhost:8082}
+
+zuul:
+  routes:
+    users:
+      path: /api/users/**
+      url: ${services.core.host}
+      stripPrefix: false
+    namespaces:
+      path: /api/namespaces/**
+      url: ${services.core.host}
+      stripPrefix: false
+    apps:
+      path: /api/apps/**
+      url: ${services.core.host}
+      stripPrefix: false
+    environments:
+      path: /api/environments/**
+      url: ${services.core.host}
+      stripPrefix: false
+    blueprints:
+      path: /api/blueprints/**
+      url: ${services.core.host}
+      stripPrefix: false
+    runs:
+      path: /api/runs/**
+      url: ${services.run.host}
+      stripPrefix: false
+
+testament.gateway.security.jwt:
+  uri: /auth/login
+  header: Authorization
+  prefix: "Bearer "
+  expiration: 86400
+
+ribbon.eureka.enabled: false
+
+---
+
+spring.profiles: dev
+testament.gateway.security.jwt.secret: some_secret
+#testament.gateway.security.jwt.secret: ${TESTAMENT_JWT_SECRET}
+server.port: 8080
